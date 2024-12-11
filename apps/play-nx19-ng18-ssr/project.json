@@ -1,0 +1,94 @@
+{
+  "name": "play-nx19-ng18-ssr",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/play-nx19-ng18-ssr/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/play-nx19-ng18-ssr",
+        "index": "apps/play-nx19-ng18-ssr/src/index.html",
+        "browser": "apps/play-nx19-ng18-ssr/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/play-nx19-ng18-ssr/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/play-nx19-ng18-ssr/public"
+          }
+        ],
+        "styles": ["apps/play-nx19-ng18-ssr/src/styles.scss"],
+        "scripts": [],
+        "server": "apps/play-nx19-ng18-ssr/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/play-nx19-ng18-ssr/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "play-nx19-ng18-ssr:build:production"
+        },
+        "development": {
+          "buildTarget": "play-nx19-ng18-ssr:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "play-nx19-ng18-ssr:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/play-nx19-ng18-ssr/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "play-nx19-ng18-ssr:build",
+        "staticFilePath": "dist/apps/play-nx19-ng18-ssr/browser",
+        "spa": true
+      }
+    }
+  }
+}
